@@ -46,6 +46,12 @@
 
 (def chats (atom {#{:announcements} announcements-log}))
 
+(defn get-chat-key
+  [username other-user]
+  (let [username (keyword username)
+        other-user (keyword other-user)]
+    (if (= other-user :announcements) #{:announcements} #{username other-user})))
+
 (defn init-chats-for-user [username]
   (let [username (keyword username)
         existing-users @users

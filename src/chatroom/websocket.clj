@@ -62,7 +62,7 @@
 (defn test-handler [request]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body (-> (chat/chatroom-view (-> request :params :login)) (hiccup/html) (str))})
+   :body (-> (chat/chatroom-view (-> request :params :login) "announcements") (hiccup/html) (str))})
 
 (defn login-request-handler
   [request]
@@ -83,10 +83,11 @@
 
 (defn switch-chat-handler
   [request]
-  (let [chat (-> request :params :chat)]
+  (let [username (-> request :params :username)
+        other-user (-> request :params :otherUser)]
     {:status 200
      :headers {"Content-Type" "text/html"}
-     :body (-> [:p chat] (hiccup/html) (str))}))
+     :body (-> (chat/chatbox (db/get-chat-key username other-user) "test-element-ws") (hiccup/html) (str))}))
 
 (defroutes test-routes
   ;; html

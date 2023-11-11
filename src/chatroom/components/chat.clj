@@ -9,6 +9,8 @@
 ;; - when some other user chooses you for a chat and sends you a message you
 ;;   should see a notification light (and the chat button gets created
 ;;   automatically if it doesnt exist yet for you) ;
+;;
+;; TODO: take out "test-element-ws" id of the chatbox into a var
 (ns chatroom.components.chat
   (:require [hiccup.page :as page]
             [clojure.string :as s]
@@ -41,12 +43,12 @@
    [:p {:class "pl-12 italic text-yellow-400"} author]
    [:h8 {:class "pl-2"} body]])
 
-(defn chatbox [& id]
+(defn chatbox [chat-key & id]
   [:div {:id (or id "chatbox")}
-   (let [msgs @db/msg-log
+   (let [msgs (get @db/chats chat-key)
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
-   (for [[msg dark?] (map vector msgs seq-dark?)] (chat-msg msg dark?)))])
+     (for [[msg dark?] (map vector msgs seq-dark?)] (chat-msg msg dark?)))])
 
 ;; ----------------------------------------------------------------------------
 ;; msg input element
@@ -78,17 +80,17 @@
 (defn goto-chat-button-style []
  "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
 
-(defn goto-chat-button-params [& chat]
+(defn goto-chat-button-params [username & other-user]
   {:type "button"
-   :hx-get (format "/switch_chat?chat=%s" (or chat "announcements"))
+   :hx-get (format "/switch_chat?username=%s&otherUser=%s" username (or other-user "announcements"))
    :hx-target "#test-element-ws"
    :hx-swap "outerHTML"
    :class (goto-chat-button-style)})
 
 (defn goto-chat-button
-  []
+  [username]
   [:div {:class (goto-chat-style)}
-   [:button (goto-chat-button-params) "D"]])
+   [:button (goto-chat-button-params username) "D"]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat element
@@ -102,12 +104,12 @@
  "h-auto rounded-lg bg-gray-200 lg:col-span-9")
 
 (defn chat-element
-  [username]
+  [username other-user]
   [:div {:class (chat-element-style)}
    [:div {:class (chat-element-left-column-style)}
-    (goto-chat-button)]
+    (goto-chat-button username)]
    [:div {:class (chat-element-right-column-style)}
-    (chatbox "test-element-ws")
+    (chatbox (db/get-chat-key username other-user) "test-element-ws")
     (input-box-ws username)]])
 
 ;; ----------------------------------------------------------------------------
@@ -117,14 +119,14 @@
 
 (defn chatroom-view
   "TODO figure out how to take out the init part outside"
-  [username]
+  [username other-user]
   ;(println (str "Greetings, " username))
   [:body 
    [:div {:class (chatroom-view-style)}
      (htmx-init)
      (htmx-ws-init)
      (page/include-css "/css/output.css")
-     (chat-element username)]
+     (chat-element username other-user)]
    ])
 
 (comment
