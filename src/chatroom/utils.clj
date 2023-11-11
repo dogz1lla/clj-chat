@@ -15,3 +15,5 @@
   [n]
   (loop [result [] switch true i 0]
     (if (= i n) result (recur (conj result switch) (not switch) (inc i)))))
+
+(defn uuid [] (str (java.util.UUID/randomUUID)))

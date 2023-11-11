@@ -16,8 +16,6 @@
             [clojure.string :as s]))
 
 
-(defn uuid [] (str (java.util.UUID/randomUUID)))
-
 (defn notify-clients [msg]
   (doseq [[_ channel] @clients/clients]
     (server/send! channel msg)))
@@ -36,7 +34,7 @@
     {:status 200 :body "Welcome to the chatroom! JS client connecting..."}
     (server/as-channel ring-req
       (let [username (-> ring-req :params :username)
-            uid (uuid)] ; client uid
+            uid (utils/uuid)] ; client uid
         {:on-receive (fn [ch message]
                        (println message)
                        (on-chat-msg! username (get (cheshire/parse-string message) "input-ws"))
@@ -83,11 +81,19 @@
    :headers {"Content-Type" "text/html"}
    :body (-> (login/login-view) (hiccup/html) (str))})
 
+(defn switch-chat-handler
+  [request]
+  (let [chat (-> request :params :chat)]
+    {:status 200
+     :headers {"Content-Type" "text/html"}
+     :body (-> [:p chat] (hiccup/html) (str))}))
+
 (defroutes test-routes
   ;; html
   (GET "/" request (root-handler request))
   (GET "/login-request" request (login-request-handler request))
   (POST "/test" request (test-handler request))
+  (GET "/switch_chat" request (switch-chat-handler request))
   ;(GET "/button-test" request (test-button-press-handler request))
   ;; rest api
   (GET "/ping" request (ping-handler request))

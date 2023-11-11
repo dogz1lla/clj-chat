@@ -78,8 +78,11 @@
 (defn goto-chat-button-style []
  "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
 
-(defn goto-chat-button-params []
+(defn goto-chat-button-params [& chat]
   {:type "button"
+   :hx-get (format "/switch_chat?chat=%s" (or chat "announcements"))
+   :hx-target "#test-element-ws"
+   :hx-swap "outerHTML"
    :class (goto-chat-button-style)})
 
 (defn goto-chat-button
