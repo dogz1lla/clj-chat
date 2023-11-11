@@ -112,22 +112,6 @@
    ])
 
 (comment
-  ;; TODO NEXT: 
-  ;; - [x] figure out why msg text is outside of the div;
-  ;; - [x] make the chatbox expand automatically on new messages;
-  ;; - [x] confirm that the message is sent from the ui to websocket;
-  ;; - [x] update the html on receiving the msg over websocket;
-  ;; - [x] add a "login" page on connect that simply asks for the username;
-  ;; - [x] figure out how to pass the username from login to chatbox view;
-  ;; - [x] setup the tailwind, see https://tailwindcss.com/blog/standalone-cli
-  ;; - [ ] create a chat button element and add the default one to the list;
-  ;; - [x] write a README including how to setup tailwind css and how to run;
-  ;; - [x] create a repo;
-  ;; - [ ] clear the input field after submitting the message
-  ;; - [ ] do a proper chat autoscroll on new messages;
-  ;; - [x] cache avatar once the user joins the websocket;
-  ;; - [ ] hook up the chatroom view with the room logic, display rooms on the
-  ;;       left of the view, let the user switch between them;
   (reset! msg-log [{:author "announcements" :body "Greetings, welcome to dogz1lla's private chatroom!"}])
   (map vector [1 2] [3 4])
   (map vector [{:1 2 :2 4}] [3 4])
