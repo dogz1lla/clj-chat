@@ -13,18 +13,11 @@
   (:require [hiccup.page :as page]
             [clojure.string :as s]
             [chatroom.components.avatar :as ava]
-            [chatroom.utils :as utils]))
+            [chatroom.utils :as utils]
+            [chatroom.db :as db]))
 
-
-;; layout constants
-(def width 500)
 
 ;; msg log cache
-(def msg-log 
-  (atom [{:author "announcements" :body "Greetings, welcome to dogz1lla's private chatroom!"}
-         {:author "chat-bot" :body "hi"}
-         {:author "chat-bot" :body "bye"}]))
-
 (defn htmx-init []
   [:script {:src "https://unpkg.com/htmx.org@1.9.6"}])
 
@@ -50,7 +43,7 @@
 
 (defn chatbox [& id]
   [:div {:id (or id "chatbox")}
-   (let [msgs @msg-log
+   (let [msgs @db/msg-log
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
    (for [[msg dark?] (map vector msgs seq-dark?)] (chat-msg msg dark?)))])
@@ -132,7 +125,6 @@
    ])
 
 (comment
-  (reset! msg-log [{:author "announcements" :body "Greetings, welcome to dogz1lla's private chatroom!"}])
   (map vector [1 2] [3 4])
   (map vector [{:1 2 :2 4}] [3 4])
   (chatbox)

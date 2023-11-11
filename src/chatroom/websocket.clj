@@ -4,6 +4,7 @@
             [chatroom.components.chat :as chat]
             [chatroom.components.login :as login]
             [chatroom.components.avatar :as ava]
+            [chatroom.db :as db]
             [compojure.core :refer [defroutes GET POST routes]]
             [org.httpkit.server :as server]
             [hiccup.core :as hiccup]
@@ -27,7 +28,7 @@
   (reset! chat/msg-box-color-switch (not @chat/msg-box-color-switch))
   (when (not (get @ava/author->avatar author))
     (swap! ava/author->avatar assoc author (chat/random-avatar)))
-  (swap! chat/msg-log conj {:author author :body msg}))
+  (swap! db/msg-log conj {:author author :body msg}))
 
 ;; see https://github.com/http-kit/http-kit/blob/master/src/org/httpkit/server.clj
 (defn ws-connect-handler [ring-req]
@@ -64,16 +65,6 @@
   {:status 200
    :headers {"Content-Type" "text/html"}
    :body (-> (chat/chatroom-view (-> request :params :login)) (hiccup/html) (str))})
-
-; (defn test-button-press-handler [request]
-;   ;(println (:query-string request))
-;   (println request)
-;   ; (reset! chat/msg-box-color-switch (not @chat/msg-box-color-switch))
-;   ; (swap! chat/msg-log conj (-> request :params :input))
-;   (on-chat-msg! (-> request :params :input))
-;   {:status 200
-;    :headers {"Content-Type" "text/html"}
-;    :body (-> (chat/chatbox) (hiccup/html) (str))})
 
 (defn login-request-handler
   [request]
