@@ -33,20 +33,20 @@
 
 ;; ----------------------------------------------------------------------------
 ;; chat and messages
-(defn chat-msg-style-tailwind
+(defn chat-msg-style
   [dark?]
   (s/join 
     " "
-    ["h-auto" (if dark? "bg-teal-500/75" "bg-teal-600/75") "m-1" "rounded-lg"]))
+    ["h-auto m-1 rounded-lg" (if dark? "bg-teal-500/75" "bg-teal-600/75")]))
 
 (defn chat-msg
   "see https://www.w3schools.com/howto/howto_css_chat.asp"
   [{:keys [author body]} dark?]
-  [:div {:class (chat-msg-style-tailwind dark?)}
+  [:div {:class (chat-msg-style dark?)}
    [:span {:class "float-left relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full"}
      [:img {:src (get @ava/author->avatar author) :class "aspect-square h-full w-full"}]]
    [:p {:class "pl-12 italic text-yellow-400"} author]
-   [:h8 {:style {:padding-left "5px"}} body]])
+   [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [& id]
   [:div {:id (or id "chatbox")}
@@ -58,15 +58,13 @@
 ;; ----------------------------------------------------------------------------
 ;; msg input element
 (defn input-box-input-style []
-  {:width "full"
-   :height "40px"
-   :border "1px solid black"})
+  "w-full h-10 border-2 border-teal-500 pl-2")
 
 (defn input-box-input-params []
   {:type "text"
    :name "input-ws"
    :id "input-field-ws"
-   :class "w-full h-10 border-2 border-teal-500 pl-2"
+   :class (input-box-input-style)
    :placeholder "enter your message"})
 
 (defn input-box-form-params []
@@ -81,30 +79,52 @@
 
 ;; ----------------------------------------------------------------------------
 ;; chat side panel button
+(defn goto-chat-style []
+  "w-5/6 h-auto m-1 aspect-square")
+
+(defn goto-chat-button-style []
+ "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
+
+(defn goto-chat-button-params []
+  {:type "button"
+   :class (goto-chat-button-style)})
+
 (defn goto-chat-button
   []
-  [:div {:class "w-5/6 h-auto m-1 aspect-square"}
-   [:button {:type "button" :class "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500"} "D"]])
+  [:div {:class (goto-chat-style)}
+   [:button (goto-chat-button-params) "D"]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat element
+(defn chat-element-style []
+  "h-auto grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4")
+
+(defn chat-element-left-column-style []
+  "h-auto rounded-lg bg-gray-200")
+
+(defn chat-element-right-column-style []
+ "h-auto rounded-lg bg-gray-200 lg:col-span-9")
+
 (defn chat-element
   [username]
-  [:div {:class "h-auto grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4"}
-   [:div {:class "h-auto rounded-lg bg-gray-200"}
+  [:div {:class (chat-element-style)}
+   [:div {:class (chat-element-left-column-style)}
     (goto-chat-button)]
-   [:div {:class "h-auto rounded-lg bg-gray-200 lg:col-span-9"}
+   [:div {:class (chat-element-right-column-style)}
     (chatbox "test-element-ws")
     (input-box-ws username)]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat view
+(defn chatroom-view-style []
+  "m-auto w-2/3")
+
 (defn chatroom-view
   "TODO figure out how to take out the init part outside"
   [username]
-  (println (str "Greetings, " username))
+  ;(println (str "Greetings, " username))
   [:body 
-   [:div {:class "m-auto w-2/3"}
+   [:div {:class (chatroom-view-style)}
      (htmx-init)
      (htmx-ws-init)
      (page/include-css "/css/output.css")
