@@ -17,7 +17,7 @@
 ;; TODO: remove after fixing rooms (this will be in announcements)
 (def msg-log 
   (atom [{:author "announcements"
-          :body "Greetings, welcome to dogz1lla's private chatroom!"}
+          :body "Greetings, welcome to dogz1lla's chat app!"}
          {:author "chat-bot"
           :body "hi"}
          {:author "chat-bot"
@@ -38,7 +38,7 @@
 ;; and it is shared with all the other users.
 (def announcements-log
    [{:author "announcements"
-     :body "Greetings, welcome to dogz1lla's private chatroom!"}
+     :body "Greetings, welcome to dogz1lla's chat app!"}
     {:author "chat-bot"
      :body "hi"}
     {:author "chat-bot"
@@ -83,24 +83,9 @@
 (defn init-users-active-chat! [username]
   (set-users-active-chat! username "announcements"))
 
-; (def user->rooms (atom {}))
-; (def room->msgs 
-;   (atom {:announcements [{:author "announcements"
-;                           :body "Greetings, welcome to dogz1lla's chat app!"}
-;                          {:author "chat-bot"
-;                           :body "hi"}
-;                          {:author "chat-bot"
-;                           :body "bye"}]}))
-;
-; (defn rooms-default [username]
-;   #{:announcements (keyword username)})
-;
-; (defn rooms-add-users [rooms]
-;   (reduce conj rooms (keys @user->rooms)))
-
 (comment
   (reset! msg-log [{:author "announcements"
-                    :body "Greetings, welcome to dogz1lla's private chatroom!"}])
+                    :body "Greetings, welcome to dogz1lla's chat app!"}])
   (get {#{1, 2} 1} #{2, 1})
   {#{:dogz1lla :batman} []}
   (@users :dogz1lla)
