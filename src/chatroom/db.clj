@@ -25,7 +25,7 @@
 
 ;; user set
 (def users (atom #{:announcements}))
-(defn add-user
+(defn add-user!
   "Upon connecting, a username is added to the set of users using the app."
   [username]
   (swap! users conj (keyword username)))
@@ -52,23 +52,34 @@
         other-user (keyword other-user)]
     (if (= other-user :announcements) #{:announcements} #{username other-user})))
 
-(defn init-chats-for-user [username]
-  (let [username (keyword username)
-        existing-users @users
-        new-entries (reduce
-                      (fn [m u]
-                        (if-not
-                          (= u :announcements)
-                          (assoc m #{username u} [])
-                          m)) 
-                      {}
-                      existing-users)]
-    (swap! chats merge new-entries)))
+(defn init-chats-for-user!
+  [username]
+  (let [username (keyword username)]
+  (when-not (@users username)
+    (let [existing-users @users
+          new-entries (reduce
+                        (fn [m u]
+                          (if-not
+                            (= u :announcements)
+                            (assoc m #{username u} [])
+                            m)) 
+                        {}
+                        existing-users)]
+      (swap! chats merge new-entries)))))
 
 (defn list-chats-for-user [username]
   (let [username (keyword username)
         all-chats (keys @chats)]
     (conj (filter #(% username) all-chats) #{:announcements})))
+
+(defn add-chat-msg!
+  "Add a new message to the chat between two users.
+  Note that the msg is a string that needs to be brought to the
+  {:author username, :body msg} format to be stored in the db."
+  [username other-user msg]
+  (let [chat-key (get-chat-key username other-user)
+        msgs-so-far (get @chats chat-key)]
+    (swap! chats assoc chat-key (conj msgs-so-far {:author username :body msg}))))
 
 ;; # User state
 ;; ----------------------------------------------------------------------------
@@ -83,6 +94,9 @@
 (defn init-users-active-chat! [username]
   (set-users-active-chat! username "announcements"))
 
+(defn get-users-active-chat [username]
+  (get @user->active-chat username))
+
 (comment
   (reset! msg-log [{:author "announcements"
                     :body "Greetings, welcome to dogz1lla's chat app!"}])
@@ -90,9 +104,20 @@
   {#{:dogz1lla :batman} []}
   (@users :dogz1lla)
   (@users :announcements)
-  (add-user "dogz1lla")
-  (init-chats-for-user "batman")
+  (add-user! "dogz1lla")
+  (init-chats-for-user! "batman")
+  (init-chats-for-user! "batman")
   (list-chats-for-user "dogz1lla")
   (disj #{1 2} 1)
   (init-users-active-chat "dogz1lla")
+  (conj #{:1 :2} :2)
+  (assoc {:1 1} :1 2)
+  (merge {:1 1} {:1 2})
+  #{1 1}
+  (defn test-notify-clients [msg & selected-ids]
+    (let [all-channels {}
+          send-to (if selected-ids (into {} (filter (fn [kv] (selected-ids (first kv))) all-channels)) all-channels)]
+      (doseq [[_ channel] send-to]
+        (println channel msg))))
+  (test-notify-clients "hi" #{"uid"})
   )

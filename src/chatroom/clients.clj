@@ -1,4 +1,5 @@
-(ns chatroom.clients)
+(ns chatroom.clients
+  (:require [clojure.set :as cs]))
 
 
 (defonce clients (atom {}))
@@ -18,9 +19,17 @@
         conns (@user->ws-conn-id username)]
     (swap! user->ws-conn-id assoc username (disj conns conn-uid))))
 
+(defn get-users-conns
+  "Return a set of conn ids for a given user."
+  [username]
+  (get @user->ws-conn-id (keyword username)))
+
 (comment
   (:ei {:hi "bye"})
   ({:hi "bye"} :ei)
   (add-ws-conn! "dogz1lla" "uid")
+  (add-ws-conn! "dogz1lla" "uid2")
   (rm-ws-conn! "dogz1lla" "uid")
+  (into {} (filter (fn [kv] (#{:1} (first kv))) {:1 1 :2 2}))
+  (cs/union #{1 2} #{3 4 2})
   )
