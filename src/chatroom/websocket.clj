@@ -23,9 +23,8 @@
 (defn on-chat-msg!
   " Add a new message to history and update the msg color state."
   [author msg]
-  (reset! chat/msg-box-color-switch (not @chat/msg-box-color-switch))
   (when (not (get @ava/author->avatar author))
-    (swap! ava/author->avatar assoc author (chat/random-avatar)))
+    (swap! ava/author->avatar assoc author (ava/random-avatar)))
   (swap! db/msg-log conj {:author author :body msg}))
 
 ;; see https://github.com/http-kit/http-kit/blob/master/src/org/httpkit/server.clj
@@ -34,7 +33,7 @@
     {:status 200 :body "Welcome to the chatroom! JS client connecting..."}
     (server/as-channel ring-req
       (let [username (-> ring-req :params :username)
-            uid (utils/uuid)] ; client uid
+            uid (utils/uuid)] ; websocket connection uid
         {:on-receive (fn [ch message]
                        (println message)
                        (on-chat-msg! username (get (cheshire/parse-string message) "input-ws"))

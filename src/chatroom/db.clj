@@ -70,6 +70,19 @@
         all-chats (keys @chats)]
     (conj (filter #(% username) all-chats) #{:announcements})))
 
+;; # User state
+;; ----------------------------------------------------------------------------
+;; user->active-chat map stores which chat a given user is currently looking at
+;; it is a map from str to str
+(def user->active-chat
+  (atom {}))
+
+(defn set-users-active-chat! [username other-user]
+  (swap! user->active-chat assoc username other-user))
+
+(defn init-users-active-chat! [username]
+  (set-users-active-chat! username "announcements"))
+
 ; (def user->rooms (atom {}))
 ; (def room->msgs 
 ;   (atom {:announcements [{:author "announcements"
@@ -88,10 +101,6 @@
 (comment
   (reset! msg-log [{:author "announcements"
                     :body "Greetings, welcome to dogz1lla's private chatroom!"}])
-  {"dogz1lla" #{"announcements" "another-room"}}
-  {"announcements" @msg-log "another-room" []}
-  (conj #{"hi"} "bye")
-  (rooms-add-users (rooms-default "dogz1lla"))
   (get {#{1, 2} 1} #{2, 1})
   {#{:dogz1lla :batman} []}
   (@users :dogz1lla)
@@ -100,4 +109,5 @@
   (init-chats-for-user "batman")
   (list-chats-for-user "dogz1lla")
   (disj #{1 2} 1)
+  (init-users-active-chat "dogz1lla")
   )
