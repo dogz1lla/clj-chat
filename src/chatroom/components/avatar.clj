@@ -97,3 +97,8 @@
     (utils/random-choice clothes-options)
     (utils/random-choice accessories-options)))
 
+(defn init-user-avatar! 
+  [username]
+  (let [existing-avatar (get @author->avatar username)]
+    (when-not existing-avatar
+      (swap! author->avatar assoc username (random-avatar)))))

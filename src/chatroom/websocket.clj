@@ -78,7 +78,8 @@
                        #_(notify-clients (-> (chat/chatbox "test-element-ws") (hiccup/html) (str))))
          :on-close   (fn [ch status] 
                        (swap! clients/clients dissoc uid)
-                       (swap! ava/author->avatar dissoc username)
+                       #_(swap! ava/author->avatar dissoc username)
+                       (clients/rm-ws-conn! username uid)
                        (println (str "client " uid " disconnected with status " status)))
          :on-open    (fn [ch]
                        (swap! clients/clients assoc uid ch)
@@ -86,7 +87,8 @@
                        (db/init-chats-for-user! username)
                        (db/init-users-active-chat! username)
                        (clients/add-ws-conn! username uid)
-                       (println @clients/clients))}))))
+                       (ava/init-user-avatar! username)
+                       #_(println @clients/clients))}))))
 
 (defn ping-handler [request]
   {:status 200
