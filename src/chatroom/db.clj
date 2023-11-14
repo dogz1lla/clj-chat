@@ -25,10 +25,15 @@
 ;; # Users
 ;; ----------------------------------------------------------------------------
 (def users (atom #{"announcements"}))
+
 (defn add-user!
   "Upon connecting, a username is added to the set of users using the app."
   [username]
   (swap! users conj username))
+
+(defn get-users
+  []
+  (disj @users "announcements"))
 
 ;; # Chats
 ;; ----------------------------------------------------------------------------
@@ -129,4 +134,6 @@
   (test-notify-clients "hi" #{"uid"})
   (name :hi)
   (conj [1] 2)
+  (into #{1} #{2 3})
+  (#{1 2} 2)
   )

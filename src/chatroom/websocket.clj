@@ -26,6 +26,11 @@
     (doseq [[_ channel] send-to]
       (server/send! channel msg))))
 
+(defn notify-users-clients
+  "Send a message to all of the ws connections of a particular user."
+  [username msg]
+  (let [user-conns (clients/get-users-conns username)]
+    (notify-clients msg user-conns)))
 
 ; (defn notify-clients [msg]
 ;   (doseq [[_ channel] @clients/clients]
@@ -91,12 +96,22 @@
                        (clients/rm-ws-conn! username uid)
                        (println (str "client " uid " disconnected with status " status)))
          :on-open    (fn [ch]
-                       (swap! clients/clients assoc uid ch)
-                       (db/add-user! username)
-                       (db/init-chats-for-user! username)
-                       (db/init-users-active-chat! username)
-                       (clients/add-ws-conn! username uid)
-                       (ava/init-user-avatar! username)
+                       (let [new-user? (not ((db/get-users) username))]
+                         (swap! clients/clients assoc uid ch)
+                         (db/add-user! username)
+                         (db/init-chats-for-user! username)
+                         (db/init-users-active-chat! username)
+                         (clients/add-ws-conn! username uid)
+                         (ava/init-user-avatar! username)
+                         ; if the username is connecting for the first time ever
+                         ; then update the side buttons of all the other users
+                         (when new-user?
+                           (doseq [username (db/get-users)] 
+                             (notify-users-clients
+                               username
+                               (-> (chat/generate-chat-buttons username)
+                                   (hiccup/html)
+                                   (str))))))
                        #_(println @clients/clients))}))))
 
 (defn ping-handler [request]

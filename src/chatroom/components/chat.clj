@@ -108,14 +108,17 @@
 (defn chat-element-right-column-style []
  "h-auto rounded-lg bg-gray-200 lg:col-span-9")
 
+(defn generate-chat-buttons
+  [username]
+  [:div {:id "side-buttons"}
+    (let [all-chats (db/list-chats-for-user username)]
+      (for [other-user all-chats] (goto-chat-button username other-user)))])
+
 (defn chat-element
   [username other-user]
   [:div {:class (chat-element-style)}
    [:div {:class (chat-element-left-column-style)}
-    (let [all-chats (db/list-chats-for-user username)]
-      (for [other-user all-chats] (goto-chat-button username other-user)))
-    #_(goto-chat-button username)
-    ]
+    (generate-chat-buttons username)]
    [:div {:class (chat-element-right-column-style)}
     (chatbox (db/get-chat-key username other-user) "test-element-ws")
     (input-box-ws username)]])
