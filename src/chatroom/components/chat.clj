@@ -44,7 +44,7 @@
    [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [chat-key & id]
-  [:div {:id (or id "chatbox")}
+  [:div {:id (or id "chatbox") :class "overflow-auto"}
    (let [msgs (get @db/chats chat-key)
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
@@ -110,13 +110,13 @@
 ;; ----------------------------------------------------------------------------
 ;; chat element
 (defn chat-element-style []
-  "h-auto grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4")
+  "h-screen grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4")
 
 (defn chat-element-left-column-style []
-  "h-auto rounded-lg bg-gray-200")
+  "h-2/3 rounded-lg bg-gray-200")
 
 (defn chat-element-right-column-style []
- "h-auto rounded-lg bg-gray-200 lg:col-span-9")
+  "h-2/3 rounded-lg bg-gray-200 lg:col-span-9")
 
 (defn generate-chat-buttons
   [username]
@@ -130,8 +130,13 @@
    [:div {:class (chat-element-left-column-style)}
     (generate-chat-buttons username)]
    [:div {:class (chat-element-right-column-style)}
-    (chatbox (db/get-chat-key username other-user) "test-element-ws")
-    (input-box-ws username)]])
+    ; (chatbox (db/get-chat-key username other-user) "test-element-ws")
+    ; (input-box-ws username)
+    [:div {:class "h-full grid grid-rows-8 gap-1"}
+     [:div {:class "row-span-7 overflow-auto"}
+        (chatbox (db/get-chat-key username other-user) "test-element-ws")]
+     [:div #_{:class "row-span-1"}
+      (input-box-ws username)]]]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat view
