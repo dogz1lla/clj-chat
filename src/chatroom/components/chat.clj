@@ -159,4 +159,5 @@
   (map vector [1 2] [3 4])
   (map vector [{:1 2 :2 4}] [3 4])
   (chatbox)
+  (map #(= 0 (mod % 2)) (range 10))
   )

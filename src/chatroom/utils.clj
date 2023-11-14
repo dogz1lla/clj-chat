@@ -13,7 +13,6 @@
 
 (defn alternating-true
   [n]
-  (loop [result [] switch true i 0]
-    (if (= i n) result (recur (conj result switch) (not switch) (inc i)))))
+  (map #(= 1 (mod % 2)) (range n)))
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
