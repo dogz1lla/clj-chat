@@ -13,7 +13,6 @@
 (ns chatroom.db
   (:require [chatroom.utils :as utils]))
 
-
 ;; TODO: remove after fixing rooms (this will be in announcements)
 (def msg-log 
   (atom [{:author "announcements"
@@ -23,12 +22,13 @@
          {:author "chat-bot"
           :body "bye"}]))
 
-;; user set
-(def users (atom #{:announcements}))
+;; # Users
+;; ----------------------------------------------------------------------------
+(def users (atom #{"announcements"}))
 (defn add-user!
   "Upon connecting, a username is added to the set of users using the app."
   [username]
-  (swap! users conj (keyword username)))
+  (swap! users conj username))
 
 ;; # Chats
 ;; ----------------------------------------------------------------------------
@@ -44,33 +44,38 @@
     {:author "chat-bot"
      :body "bye"}])
 
-(def chats (atom {#{:announcements} announcements-log}))
+(def chats (atom {#{"announcements"} announcements-log}))
 
 (defn get-chat-key
   [username other-user]
-  (let [username (keyword username)
-        other-user (keyword other-user)]
-    (if (= other-user :announcements) #{:announcements} #{username other-user})))
+  (if (= other-user "announcements") #{"announcements"} #{username other-user}))
 
 (defn init-chats-for-user!
   [username]
-  (let [username (keyword username)]
   (when-not (@users username)
     (let [existing-users @users
           new-entries (reduce
                         (fn [m u]
                           (if-not
-                            (= u :announcements)
+                            (= u "announcements")
                             (assoc m #{username u} [])
                             m)) 
                         {}
                         existing-users)]
-      (swap! chats merge new-entries)))))
+      (swap! chats merge new-entries))))
 
-(defn list-chats-for-user [username]
-  (let [username (keyword username)
-        all-chats (keys @chats)]
-    (conj (filter #(% username) all-chats) #{:announcements})))
+; (defn list-chats-for-user
+;   "Return a collection of... Do we even need it? it is effectively all users
+;   except the given one."
+;   [username]
+;   (let [all-chats (keys @chats)]
+;     (conj (filter #(% username) all-chats) #{"announcements"})))
+
+(defn list-chats-for-user
+  "List of chats for user == all users except the given user."
+  [username]
+  (let [all-users @users]
+    (disj all-users username)))
 
 (defn add-chat-msg!
   "Add a new message to the chat between two users.
@@ -97,13 +102,21 @@
 (defn get-users-active-chat [username]
   (get @user->active-chat username))
 
+(defn get-users-in-annoucements-chat
+  "Return a set of users that are currently looking at the announcements chat."
+  []
+  (let [all-users @users
+        active-chats @user->active-chat]
+    (->> all-users
+        (filter (fn [u] (= "announcements" (get active-chats u)))))))
+
 (comment
   (reset! msg-log [{:author "announcements"
                     :body "Greetings, welcome to dogz1lla's chat app!"}])
   (get {#{1, 2} 1} #{2, 1})
   {#{:dogz1lla :batman} []}
   (@users :dogz1lla)
-  (@users :announcements)
+  (@users "announcements")
   (add-user! "dogz1lla")
   (init-chats-for-user! "batman")
   (init-chats-for-user! "batman")
@@ -113,11 +126,7 @@
   (conj #{:1 :2} :2)
   (assoc {:1 1} :1 2)
   (merge {:1 1} {:1 2})
-  #{1 1}
-  (defn test-notify-clients [msg & selected-ids]
-    (let [all-channels {}
-          send-to (if selected-ids (into {} (filter (fn [kv] (selected-ids (first kv))) all-channels)) all-channels)]
-      (doseq [[_ channel] send-to]
-        (println channel msg))))
   (test-notify-clients "hi" #{"uid"})
+  (name :hi)
+  (conj [1] 2)
   )

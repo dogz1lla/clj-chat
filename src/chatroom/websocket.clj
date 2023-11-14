@@ -62,12 +62,21 @@
                        (let [other-user (db/get-users-active-chat username)
                              parsed-msg (get (cheshire/parse-string message) "input-ws")
                              username-conn-ids (clients/get-users-conns username)
-                             recipient-conn-ids 
+                             announcement-conn-ids
+                             (if (= other-user "announcements")
+                               (let [announcement-users (db/get-users-in-annoucements-chat)]
+                                 (reduce
+                                   (fn [c u] (into c (clients/get-users-conns u))) 
+                                   #{}
+                                   announcement-users)) ;notify ALL users who are looking at announcements
+                               #{})
+                             recipient-conn-ids  ; conn ids of the other user
                              (if
                                (= (db/get-users-active-chat other-user) username)
                                (cs/union username-conn-ids (clients/get-users-conns other-user))
                                username-conn-ids)
-                             chat-key (db/get-chat-key username other-user)]
+                             chat-key (db/get-chat-key username other-user)
+                             recipient-conn-ids (cs/union recipient-conn-ids announcement-conn-ids)]
                          (db/add-chat-msg! username other-user parsed-msg)
                          (notify-clients
                            (-> (chat/chatbox chat-key "test-element-ws")
@@ -112,13 +121,12 @@
   (println request)
   {:status 200
    :headers {"Content-Type" "text/html", "HX-Redirect" "/test"}
-   :body {:login (-> request :params :login)}
-   })
+   :body {:login (-> request :params :login)}})
 
 (defn root-handler
   [request]
   ;(println (:query-string request))
-  (println request)
+  #_(println request)
   {:status 200
    :headers {"Content-Type" "text/html"}
    :body (-> (login/login-view) (hiccup/html) (str))})

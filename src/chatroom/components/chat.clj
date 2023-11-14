@@ -80,17 +80,22 @@
 (defn goto-chat-button-style []
  "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
 
-(defn goto-chat-button-params [username & other-user]
+(defn goto-chat-button-params [username other-user]
   {:type "button"
    :hx-get (format "/switch_chat?username=%s&otherUser=%s" username (or other-user "announcements"))
    :hx-target "#test-element-ws"
    :hx-swap "outerHTML"
    :class (goto-chat-button-style)})
 
+; (defn goto-chat-button
+;   [username]
+;   [:div {:class (goto-chat-style)}
+;    [:button (goto-chat-button-params username) "D"]])
+
 (defn goto-chat-button
-  [username]
+  [username other-user]
   [:div {:class (goto-chat-style)}
-   [:button (goto-chat-button-params username) "D"]])
+   [:button (goto-chat-button-params username other-user) (subs (s/upper-case other-user) 0 2)]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat element
@@ -107,7 +112,10 @@
   [username other-user]
   [:div {:class (chat-element-style)}
    [:div {:class (chat-element-left-column-style)}
-    (goto-chat-button username)]
+    (let [all-chats (db/list-chats-for-user username)]
+      (for [other-user all-chats] (goto-chat-button username other-user)))
+    #_(goto-chat-button username)
+    ]
    [:div {:class (chat-element-right-column-style)}
     (chatbox (db/get-chat-key username other-user) "test-element-ws")
     (input-box-ws username)]])
