@@ -88,8 +88,12 @@
                                (hiccup/html)
                                (str))
                            recipient-conn-ids))
-                       #_(on-chat-msg! username (get (cheshire/parse-string message) "input-ws"))
-                       #_(notify-clients (-> (chat/chatbox "test-element-ws") (hiccup/html) (str))))
+                       (notify-users-clients
+                         username
+                         (-> (chat/input-form-element)
+                             (hiccup/html)
+                             (str)))
+                       )
          :on-close   (fn [ch status] 
                        (swap! clients/clients dissoc uid)
                        #_(swap! ava/author->avatar dissoc username)

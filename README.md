@@ -30,6 +30,13 @@ but before the element was actually updated in the browser -> this would lead
 to the user seeing the previous chat although they pressed a button to switch
 to another one (minor inconvenience but still).
 
+## Notes
+- html form's `onsubmit` didn't work well together with the HTMX's `ws-send`
+attribute;
+when i wanted to use a text input form for submitting a new message to the chat
+and also wanted to clean the input form of the text (and use the `onsubmit` for
+that to set its value to empty string) the message sent was empty;
+
 ## TODO
 - [x] figure out why msg text is outside of the div;
 - [x] make the chatbox expand automatically on new messages;
@@ -38,11 +45,11 @@ to another one (minor inconvenience but still).
 - [x] add a "login" page on connect that simply asks for the username;
 - [x] figure out how to pass the username from login to chatbox view;
 - [x] setup the tailwind, see [here](https://tailwindcss.com/blog/standalone-cli)
-- [ ] create a chat button element and add the default one to the list;
+- [x] create a chat button element and add the default one to the list;
 - [x] write a README including how to setup tailwind css and how to run;
 - [x] create a repo;
-- [ ] clear the input field after submitting the message
+- [x] clear the input field after submitting the message
 - [ ] do a proper chat autoscroll on new messages;
 - [x] cache avatar once the user joins the websocket;
-- [ ] hook up the chatroom view with the room logic, display rooms on the
+- [x] hook up the chatroom view with the room logic, display rooms on the
       left of the view, let the user switch between them;

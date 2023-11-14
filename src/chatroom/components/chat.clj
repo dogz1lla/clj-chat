@@ -58,19 +58,29 @@
 (defn input-box-input-params []
   {:type "text"
    :name "input-ws"
-   :id "input-field-ws"
+   :id "input-field"
+   :value ""
    :class (input-box-input-style)
    :placeholder "enter your message"})
 
 (defn input-box-form-params []
-  {:id "test-form-ws" :ws-send true})
+  {:id "msg-input-form"
+   ;:onsubmit "() => {document.getElementById('input-field').value=''};"
+   :ws-send true
+   ;:onsubmit "alert('sup');"
+   ;:onsubmit "document.getElementById('input-field').value='';"
+   })
+
+(defn input-form-element
+  []
+  [:form (input-box-form-params)
+      [:input (input-box-input-params)]])
 
 (defn input-box-ws
   "Message input field"
   [username]
   [:div {:hx-ext "ws" :ws-connect (str "/ws/connect?username=" username)}
-    [:form (input-box-form-params)
-      [:input (input-box-input-params)]]])
+    (input-form-element)])
 
 ;; ----------------------------------------------------------------------------
 ;; chat side panel button
