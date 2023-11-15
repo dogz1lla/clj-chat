@@ -61,15 +61,12 @@
    :id "input-field"
    :value ""
    :class (input-box-input-style)
+   :autofocus true
    :placeholder "enter your message"})
 
 (defn input-box-form-params []
   {:id "msg-input-form"
-   ;:onsubmit "() => {document.getElementById('input-field').value=''};"
-   :ws-send true
-   ;:onsubmit "alert('sup');"
-   ;:onsubmit "document.getElementById('input-field').value='';"
-   })
+   :ws-send true})
 
 (defn input-form-element
   []
