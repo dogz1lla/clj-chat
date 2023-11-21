@@ -594,6 +594,10 @@ video {
   height: 100%;
 }
 
+.h-60 {
+  height: 15rem;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -683,6 +687,10 @@ video {
 
 .pl-2 {
   padding-left: 0.5rem;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .italic {

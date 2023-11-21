@@ -52,11 +52,11 @@
   [{:keys [author body]} dark?]
   [:div {:class (chat-msg-style dark?)}
    (user-avatar-element (get @ava/author->avatar author))
-   [:p {:class "pl-12 italic text-yellow-400"} author]
+   [:p {:class "pl-12 italic font-semibold text-yellow-400"} author]
    [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [chat-key & id]
-  [:div {:id (or id "chatbox") :class "overflow-auto"}
+  [:div {:id (or id "chatbox") :class (format "h-%s overflow-auto" (* 5 uh))}
    (let [msgs (get @db/chats chat-key)
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
@@ -64,8 +64,10 @@
 
 ;; ----------------------------------------------------------------------------
 ;; msg input element
+; (defn input-box-input-style []
+;   (format "w-full h-%s border-teal-500 pl-2" uh))
 (defn input-box-input-style []
-  (format "w-full h-%s border-teal-500 pl-2" uh))
+   "w-full h-full border-teal-500 pl-2")
 
 (defn input-box-input-params []
   {:type "text"
@@ -83,7 +85,7 @@
 (defn input-form-element
   []
   [:form (input-box-form-params)
-      [:input (input-box-input-params)]])
+    [:input (input-box-input-params)]])
 
 (defn input-box-ws
   "Message input field"
@@ -140,10 +142,8 @@
    [:div {:class (chat-element-left-column-style)}
     (generate-chat-buttons username)]
    [:div {:class (chat-element-right-column-style)}
-    ; (chatbox (db/get-chat-key username other-user) "test-element-ws")
-    ; (input-box-ws username)
     [:div {:class (format "w-full h-%s grid grid-rows-6 gap-1" (* 6 uh))}
-     [:div {:class (format "h-%s row-start-1 row-span-5 overflow-auto" (* 5 uh))}
+     [:div {:class (format "h-%s row-start-1 row-span-5 " (* 5 uh))}
         (chatbox (db/get-chat-key username other-user) "test-element-ws")]
      [:div {:class (format "h-%s row-start-6 row-span-1" uh)}
       (input-box-ws username)]]]])

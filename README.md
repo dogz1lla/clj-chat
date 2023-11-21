@@ -49,6 +49,8 @@ that to set its value to empty string) the message sent was empty;
 - [x] write a README including how to setup tailwind css and how to run;
 - [x] create a repo;
 - [x] clear the input field after submitting the message
+- [ ] css: allow the chat message element to grow vertically if the message is
+      too long;
 - [ ] do a proper chat autoscroll on new messages;
 - [x] cache avatar once the user joins the websocket;
 - [x] hook up the chatroom view with the room logic, display rooms on the
