@@ -19,6 +19,11 @@
             [chatroom.db :as db]))
 
 
+;; ----------------------------------------------------------------------------
+;; styling units
+(def uh 12)  ; unit height, 1 unit = 0.25 rem
+
+;; ----------------------------------------------------------------------------
 ;; msg log cache
 (defn htmx-init []
   [:script {:src "https://unpkg.com/htmx.org@1.9.6"}])
@@ -30,16 +35,23 @@
 ;; chat and messages
 (defn chat-msg-style
   [dark?]
-  (s/join 
-    " "
-    ["h-auto m-1 rounded-lg" (if dark? "bg-teal-500/75" "bg-teal-600/75")]))
+  (format "h-%s rounded-lg %s" uh (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+
+(defn user-avatar-element
+  [src]
+  [:span {:class 
+          (s/join 
+            " "
+            ["float-left relative flex"
+             (format "h-%s w-10" uh)
+             "shrink-0 overflow-hidden rounded-full"])}
+     [:img {:src src :class "aspect-square h-full w-full"}]])
 
 (defn chat-msg
   "see https://www.w3schools.com/howto/howto_css_chat.asp"
   [{:keys [author body]} dark?]
   [:div {:class (chat-msg-style dark?)}
-   [:span {:class "float-left relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full"}
-     [:img {:src (get @ava/author->avatar author) :class "aspect-square h-full w-full"}]]
+   (user-avatar-element (get @ava/author->avatar author))
    [:p {:class "pl-12 italic text-yellow-400"} author]
    [:h8 {:class "pl-2"} body]])
 
@@ -53,7 +65,7 @@
 ;; ----------------------------------------------------------------------------
 ;; msg input element
 (defn input-box-input-style []
-  "w-full h-10 border-2 border-teal-500 pl-2")
+  (format "w-full h-%s border-teal-500 pl-2" uh))
 
 (defn input-box-input-params []
   {:type "text"
@@ -94,11 +106,6 @@
    :hx-swap "outerHTML"
    :class (goto-chat-button-style)})
 
-; (defn goto-chat-button
-;   [username]
-;   [:div {:class (goto-chat-style)}
-;    [:button (goto-chat-button-params username) "D"]])
-
 (defn goto-chat-button
   [username other-user]
   [:div {:class (goto-chat-style)}
@@ -107,13 +114,19 @@
 ;; ----------------------------------------------------------------------------
 ;; chat element
 (defn chat-element-style []
-  "h-screen grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4")
+  (format
+    "h-%s grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4"
+    (* 6 uh)))
 
 (defn chat-element-left-column-style []
-  "h-2/3 rounded-lg bg-gray-200")
+  (format
+    "h-%s rounded-lg bg-gray-200"
+    (* 6 uh)))
 
 (defn chat-element-right-column-style []
-  "h-2/3 rounded-lg bg-gray-200 lg:col-span-9")
+  (format
+    "h-%s rounded-lg bg-gray-200 lg:col-span-9"
+    (* 6 uh)))
 
 (defn generate-chat-buttons
   [username]
@@ -129,32 +142,32 @@
    [:div {:class (chat-element-right-column-style)}
     ; (chatbox (db/get-chat-key username other-user) "test-element-ws")
     ; (input-box-ws username)
-    [:div {:class "h-full grid grid-rows-8 gap-1"}
-     [:div {:class "row-span-7 overflow-auto"}
+    [:div {:class (format "w-full h-%s grid grid-rows-6 gap-1" (* 6 uh))}
+     [:div {:class (format "h-%s row-start-1 row-span-5 overflow-auto" (* 5 uh))}
         (chatbox (db/get-chat-key username other-user) "test-element-ws")]
-     [:div #_{:class "row-span-1"}
+     [:div {:class (format "h-%s row-start-6 row-span-1" uh)}
       (input-box-ws username)]]]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat view
 (defn chatroom-view-style []
-  "m-auto w-2/3")
+  (format "w-2/3 h-%s m-auto" (* 6 uh)))
 
 (defn chatroom-view
   "TODO figure out how to take out the init part outside"
   [username other-user]
-  ;(println (str "Greetings, " username))
-  [:body 
-   [:div {:class (chatroom-view-style)}
+  [:body {:class (format "h-%s" (* 6 uh))}
      (htmx-init)
      (htmx-ws-init)
      (page/include-css "/css/output.css")
-     (chat-element username other-user)]
-   ])
+     [:div {:class (chatroom-view-style)}
+       (chat-element username other-user)]])
 
 (comment
   (map vector [1 2] [3 4])
   (map vector [{:1 2 :2 4}] [3 4])
   (chatbox)
   (map #(= 0 (mod % 2)) (range 10))
+  (input-box-input-style)
+  (* 5 uh)
   )
