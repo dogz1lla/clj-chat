@@ -22,6 +22,7 @@
 ;; ----------------------------------------------------------------------------
 ;; styling units
 (def uh 12)  ; unit height, 1 unit = 0.25 rem
+(def uw 8)  ; unit width,  1 unit = 0.25 rem
 
 ;; ----------------------------------------------------------------------------
 ;; msg log cache
@@ -35,7 +36,8 @@
 ;; chat and messages
 (defn chat-msg-style
   [dark?]
-  (format "h-%s rounded-lg %s" uh (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+  (format "h-%s w-%s rounded-lg %s" uh (* 5 uw) (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+  ;(format "h-auto rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
 
 (defn user-avatar-element
   [src]
@@ -56,7 +58,7 @@
    [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [chat-key & id]
-  [:div {:id (or id "chatbox") :class (format "h-%s overflow-auto" (* 5 uh))}
+  [:div {:id (or id "chatbox") :class (format "h-%s w-%s overflow-auto" (* 5 uh) (* 5 uw))}
    (let [msgs (get @db/chats chat-key)
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
@@ -117,17 +119,17 @@
 ;; chat element
 (defn chat-element-style []
   (format
-    "h-%s grid grid-cols-1 gap-4 lg:grid-cols-10 lg:gap-4"
+    "h-%s w-[60rem] grid grid-cols-1 gap-1 lg:grid-cols-11 lg:gap-2"
     (* 6 uh)))
 
 (defn chat-element-left-column-style []
   (format
-    "h-%s rounded-lg bg-gray-200"
+    "h-%s w-[5.5rem] rounded-lg bg-gray-200"
     (* 6 uh)))
 
 (defn chat-element-right-column-style []
   (format
-    "h-%s rounded-lg bg-gray-200 lg:col-span-9"
+    "h-%s w-[54.5rem] rounded-lg bg-gray-200 lg:col-span-10"
     (* 6 uh)))
 
 (defn generate-chat-buttons
@@ -142,21 +144,23 @@
    [:div {:class (chat-element-left-column-style)}
     (generate-chat-buttons username)]
    [:div {:class (chat-element-right-column-style)}
-    [:div {:class (format "w-full h-%s grid grid-rows-6 gap-1" (* 6 uh))}
-     [:div {:class (format "h-%s row-start-1 row-span-5 " (* 5 uh))}
+    [:div {:class (format "h-%s w-full grid grid-rows-6 gap-1" (* 6 uh))}
+     [:div {:class (format "h-%s w-full row-start-1 row-span-5 " (* 5 uh))}
         (chatbox (db/get-chat-key username other-user) "test-element-ws")]
-     [:div {:class (format "h-%s row-start-6 row-span-1" uh)}
+     [:div {:class (format "h-%s w-full row-start-6 row-span-1" uh)}
       (input-box-ws username)]]]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat view
+;; n*w_column + (n-1)*w_gap
+;; n = 11; w_column = 5rem, w_gap = 0.5rem -> width = 55+5 = 60
 (defn chatroom-view-style []
-  (format "w-2/3 h-%s m-auto" (* 6 uh)))
+  (format "h-%s w-[60rem] m-auto" (* 6 uh)))
 
 (defn chatroom-view
   "TODO figure out how to take out the init part outside"
   [username other-user]
-  [:body {:class (format "h-%s" (* 6 uh))}
+  [:body {:class (format "h-%s w-[61rem] m-auto" (* 6 uh))}
      (htmx-init)
      (htmx-ws-init)
      (page/include-css "/css/output.css")
