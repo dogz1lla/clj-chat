@@ -1,15 +1,3 @@
-;; how would the different rooms view work?
-;; - what is the list of rooms anyway?
-;; - should probably not call it rooms anymore but rather "chats";
-;; - one chat per pair of users;
-;; - the first time a user (defined by the username) joins the app they have
-;;   two default chats: announcements and their own chat (for saving stuff)
-;; - there should be a button to add a new chat; the choice consists of other
-;;   users that are currently using the app;
-;; - when some other user chooses you for a chat and sends you a message you
-;;   should see a notification light (and the chat button gets created
-;;   automatically if it doesnt exist yet for you) ;
-;;
 ;; TODO: take out "test-element-ws" id of the chatbox into a var
 (ns chatroom.components.chat
   (:require [hiccup.page :as page]
@@ -18,11 +6,6 @@
             [chatroom.utils :as utils]
             [chatroom.db :as db]))
 
-
-;; ----------------------------------------------------------------------------
-;; styling units
-(def uh 12)  ; unit height, 1 unit = 0.25 rem
-;(def uw 8)  ; unit width,  1 unit = 0.25 rem
 
 ;; ----------------------------------------------------------------------------
 ;; msg log cache
@@ -36,8 +19,7 @@
 ;; chat and messages
 (defn chat-msg-style
   [dark?]
-  (format "h-%s w-full rounded-lg %s" uh (if dark? "bg-teal-500/75" "bg-teal-600/75")))
-  ;(format "h-auto rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+  (format "h-auto w-full rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
 
 (defn user-avatar-element
   [src]
@@ -45,7 +27,7 @@
           (s/join 
             " "
             ["float-left relative flex"
-             (format "h-%s w-10" uh)
+             "h-10 w-10" 
              "shrink-0 overflow-hidden rounded-full"])}
      [:img {:src src :class "aspect-square h-full w-full"}]])
 
@@ -58,7 +40,7 @@
    [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [chat-key & id]
-  [:div {:id (or id "chatbox") :class (format "h-%s w-full overflow-auto" (* 5 uh))}
+  [:div {:id (or id "chatbox") :class "h-full w-full overflow-auto"}
    (let [msgs (get @db/chats chat-key)
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
@@ -66,8 +48,6 @@
 
 ;; ----------------------------------------------------------------------------
 ;; msg input element
-; (defn input-box-input-style []
-;   (format "w-full h-%s border-teal-500 pl-2" uh))
 (defn input-box-input-style []
    "w-full h-full border-teal-500 pl-2")
 
@@ -118,19 +98,13 @@
 ;; ----------------------------------------------------------------------------
 ;; chat element
 (defn chat-element-style []
-  (format
-    "h-%s w-[60rem] grid grid-cols-1 gap-1 lg:grid-cols-11 lg:gap-2"
-    (* 6 uh)))
+  "h-[38rem] w-[60rem] grid grid-cols-1 gap-1 lg:grid-cols-11 lg:gap-2")
 
 (defn chat-element-left-column-style []
-  (format
-    "h-%s w-[5.5rem] rounded-lg bg-gray-200"
-    (* 6 uh)))
+  "h-[38rem] w-[5.5rem] rounded-lg bg-gray-200")
 
 (defn chat-element-right-column-style []
-  (format
-    "h-%s w-[54.5rem] rounded-lg bg-gray-200 lg:col-span-10"
-    (* 6 uh)))
+  "h-[38rem] w-[54.5rem] rounded-lg bg-gray-200 lg:col-span-10")
 
 (defn generate-chat-buttons
   [username]
@@ -144,23 +118,25 @@
    [:div {:class (chat-element-left-column-style)}
     (generate-chat-buttons username)]
    [:div {:class (chat-element-right-column-style)}
-    [:div {:class (format "h-%s w-full grid grid-rows-6 gap-1" (* 6 uh))}
-     [:div {:class (format "h-%s w-full row-start-1 row-span-5 " (* 5 uh))}
+    [:div {:class "h-[38rem] w-full grid grid-rows-11 gap-2"}
+     [:div {:class "h-[34.5rem] w-full row-start-1 row-span-10"}
         (chatbox (db/get-chat-key username other-user) "test-element-ws")]
-     [:div {:class (format "h-%s w-full row-start-6 row-span-1" uh)}
+     [:div {:class "h-[3rem] w-full row-start-11 row-span-1"}
       (input-box-ws username)]]]])
 
 ;; ----------------------------------------------------------------------------
 ;; chat view
 ;; n*w_column + (n-1)*w_gap
 ;; n = 11; w_column = 5rem, w_gap = 0.5rem -> width = 55+5 = 60
+;; for rows:
+;; n = 11, h_row = 3rem, h_gap = 0.5 -> height = 33+5 = 38
 (defn chatroom-view-style []
-  (format "h-%s w-[60rem] m-auto" (* 6 uh)))
+  "h-[38rem] w-[60rem] m-auto")
 
 (defn chatroom-view
   "TODO figure out how to take out the init part outside"
   [username other-user]
-  [:body {:class (format "h-%s w-[61rem] m-auto" (* 6 uh))}
+  [:body {:class "h-[40rem] w-[61rem] m-auto"}
      (htmx-init)
      (htmx-ws-init)
      (page/include-css "/css/output.css")
@@ -173,5 +149,4 @@
   (chatbox)
   (map #(= 0 (mod % 2)) (range 10))
   (input-box-input-style)
-  (* 5 uh)
   )

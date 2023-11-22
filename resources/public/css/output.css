@@ -566,6 +566,10 @@ video {
   margin: auto;
 }
 
+.m-0 {
+  margin: 0px;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -596,6 +600,30 @@ video {
 
 .h-60 {
   height: 15rem;
+}
+
+.h-\[40rem\] {
+  height: 40rem;
+}
+
+.h-\[41rem\] {
+  height: 41rem;
+}
+
+.h-\[38rem\] {
+  height: 38rem;
+}
+
+.h-\[3\.5rem\] {
+  height: 3.5rem;
+}
+
+.h-\[34\.5rem\] {
+  height: 34.5rem;
+}
+
+.h-\[3rem\] {
+  height: 3rem;
 }
 
 .w-1\/2 {
@@ -664,6 +692,10 @@ video {
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .overflow-auto {
