@@ -22,7 +22,7 @@
 ;; ----------------------------------------------------------------------------
 ;; styling units
 (def uh 12)  ; unit height, 1 unit = 0.25 rem
-(def uw 8)  ; unit width,  1 unit = 0.25 rem
+;(def uw 8)  ; unit width,  1 unit = 0.25 rem
 
 ;; ----------------------------------------------------------------------------
 ;; msg log cache
@@ -36,7 +36,7 @@
 ;; chat and messages
 (defn chat-msg-style
   [dark?]
-  (format "h-%s w-%s rounded-lg %s" uh (* 5 uw) (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+  (format "h-%s w-full rounded-lg %s" uh (if dark? "bg-teal-500/75" "bg-teal-600/75")))
   ;(format "h-auto rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
 
 (defn user-avatar-element
@@ -58,7 +58,7 @@
    [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [chat-key & id]
-  [:div {:id (or id "chatbox") :class (format "h-%s w-%s overflow-auto" (* 5 uh) (* 5 uw))}
+  [:div {:id (or id "chatbox") :class (format "h-%s w-full overflow-auto" (* 5 uh))}
    (let [msgs (get @db/chats chat-key)
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
