@@ -78,7 +78,7 @@
 ;; ----------------------------------------------------------------------------
 ;; chat side panel button
 (defn goto-chat-style []
-  "w-5/6 h-auto m-1 aspect-square")
+  "w-[5rem] m-1 aspect-square")
 
 (defn goto-chat-button-style []
  "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
