@@ -686,6 +686,18 @@ video {
   grid-template-rows: repeat(6, minmax(0, 1fr));
 }
 
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
 .gap-1 {
   gap: 0.25rem;
 }

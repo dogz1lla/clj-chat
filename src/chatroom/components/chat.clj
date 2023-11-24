@@ -40,8 +40,8 @@
    [:h8 {:class "pl-2"} body]])
 
 (defn chatbox [chat-key & id]
-  [:div {:id (or id "chatbox") :class "h-full w-full overflow-auto"}
-   (let [msgs (get @db/chats chat-key)
+  [:div {:id (or id "chatbox") :class "h-full w-full overflow-auto flex flex-col-reverse"}
+   (let [msgs (reverse (get @db/chats chat-key))
          n (count msgs)
          seq-dark? (utils/alternating-true n)]
      (for [[msg dark?] (map vector msgs seq-dark?)] (chat-msg msg dark?)))])
