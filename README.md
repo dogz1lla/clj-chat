@@ -53,6 +53,7 @@ that to set its value to empty string) the message sent was empty;
       too long;
 - [x] do a proper chat autoscroll on new messages;
 - [x] fix styling of the side buttons;
+- [ ] add a timestamp to every message;
 - [ ] fix styling of the "login" page;
 - [x] cache avatar once the user joins the websocket;
 - [x] hook up the chatroom view with the room logic, display rooms on the
