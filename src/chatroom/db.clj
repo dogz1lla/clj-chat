@@ -136,4 +136,12 @@
   (conj [1] 2)
   (into #{1} #{2 3})
   (#{1 2} 2)
+  (merge {#{"announcements"} []} (reduce
+    (fn [m u]
+      (if-not
+        (= u "announcements")
+        (assoc m #{:test u} [])
+        m)) 
+    {}
+    #{:a :b "announcements"}))
   )

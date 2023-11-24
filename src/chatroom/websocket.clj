@@ -102,8 +102,8 @@
          :on-open    (fn [ch]
                        (let [new-user? (not ((db/get-users) username))]
                          (swap! clients/clients assoc uid ch)
-                         (db/add-user! username)
                          (db/init-chats-for-user! username)
+                         (db/add-user! username)
                          (db/init-users-active-chat! username)
                          (clients/add-ws-conn! username uid)
                          (ava/init-user-avatar! username)
