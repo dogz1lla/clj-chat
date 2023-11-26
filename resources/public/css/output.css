@@ -554,6 +554,10 @@ video {
   grid-row-start: 6;
 }
 
+.float-right {
+  float: right;
+}
+
 .float-left {
   float: left;
 }

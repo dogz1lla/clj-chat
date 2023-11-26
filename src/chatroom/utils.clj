@@ -16,3 +16,9 @@
   (map #(= 1 (mod % 2)) (range n)))
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
+
+(defn now [] (new java.util.Date))
+
+
+(comment
+  (str (now)))

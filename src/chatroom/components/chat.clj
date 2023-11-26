@@ -37,7 +37,9 @@
   [:div {:class (chat-msg-style dark?)}
    (user-avatar-element (get @ava/author->avatar author))
    [:p {:class "pl-12 italic font-semibold text-yellow-400"} author]
-   [:h8 {:class "pl-2"} body]])
+   [:h8 {:class "pl-2 pl-2"} body]
+   [:span {:style {:float "right" :padding-right "0.5rem" :font-size "0.75rem"}}
+    (str (utils/now))]])
 
 (defn chatbox [chat-key & id]
   [:div {:id (or id "chatbox") :class "h-full w-full overflow-auto flex flex-col-reverse"}
