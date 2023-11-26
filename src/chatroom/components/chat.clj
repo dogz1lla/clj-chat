@@ -41,7 +41,6 @@
   [{:keys [author body timestamp]} dark?]
   [:div {:class (chat-msg-style dark?)}
    (user-avatar-element (get @ava/author->avatar author))
-   ;[:p {:class "pl-12 italic font-semibold text-[#ffb86c]"} author]
    [:p {:class "pl-12 italic font-semibold text-[#ff5555]"} author]
    [:h8 {:class "pl-2 pl-2 text-[#f8f8f2]"} body]
    [:span {:style {:float "right" :padding-right "0.5rem" :font-size "0.75rem" :color "#ffb86c"}}
@@ -90,7 +89,7 @@
   "w-[5rem] h-[5rem] mx-auto my-1 aspect-square")
 
 (defn goto-chat-button-style []
- "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
+ "w-full h-full bg-[#44475a] rounded-lg border-2 border-[#bd93f9] text-[#f1fa8c]")
 
 (defn goto-chat-button-params [username other-user]
   {:type "button"
