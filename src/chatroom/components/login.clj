@@ -12,17 +12,17 @@
   {:id "login-form" :action "/test" :method "post"})
 
 (defn login-form-input-field-style []
-  "h-10 border-2 border-teal-500 pl-2")
+  "h-10 w-full border-2 border-teal-500 pl-2 mt-4")
 
 (defn login-form-input-field-params []
   {:type "text"
    :name "login"
    :id "login-input-field"
-   :placeholder "please enter your name"
+   :placeholder "please enter your nickname"
    :class (login-form-input-field-style)})
 
 (defn login-form-submit-style []
- "h-10 border-2 border-teal-500 pl-2 ml-2")
+ "h-10 w-full border-2 border-teal-500 mt-4 rounded-lg")
 
 (defn login-form-submit-params []
   {:type "submit"
@@ -34,7 +34,7 @@
     [:input (login-form-submit-params)]])
 
 (defn login-view-style []
- "m-auto w-1/2")
+ "m-auto w-[20rem] h-[10rem] ")
 
 (defn login-view
   []
