@@ -43,11 +43,14 @@
 ;; and it is shared with all the other users.
 (def announcements-log
    [{:author "announcements"
-     :body "Greetings, welcome to dogz1lla's chat app!"}
+     :body "Greetings, welcome to dogz1lla's chat app!"
+     :timestamp "Sun Nov 26 00:00:00 CET 2023"}
     {:author "chat-bot"
-     :body "hi"}
+     :body "hi"
+     :timestamp "Sun Nov 26 00:00:01 CET 2023"}
     {:author "chat-bot"
-     :body "bye"}])
+     :body "bye"
+     :timestamp "Sun Nov 26 00:00:02 CET 2023"}])
 
 (def chats (atom {#{"announcements"} announcements-log}))
 
@@ -89,7 +92,8 @@
   [username other-user msg]
   (let [chat-key (get-chat-key username other-user)
         msgs-so-far (get @chats chat-key)]
-    (swap! chats assoc chat-key (conj msgs-so-far {:author username :body msg}))))
+    (swap! chats assoc chat-key 
+           (conj msgs-so-far {:author username :body msg :timestamp (str (utils/now))}))))
 
 ;; # User state
 ;; ----------------------------------------------------------------------------
