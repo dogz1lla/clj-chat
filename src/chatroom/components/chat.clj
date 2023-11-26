@@ -19,7 +19,7 @@
 ;; chat and messages
 (defn chat-msg-style
   [dark?]
-  (format "h-auto w-full rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+  (format "h-auto w-[53rem] mx-[0.75rem] my-[0.1rem] rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
 
 (defn user-avatar-element
   [src]
@@ -103,10 +103,10 @@
   "h-[38rem] w-[60rem] grid grid-cols-1 gap-1 lg:grid-cols-11 lg:gap-2")
 
 (defn chat-element-left-column-style []
-  "h-[38rem] w-[5.5rem] rounded-lg bg-gray-200")
+  "h-[38rem] w-[5.5rem] bg-gray-200")
 
 (defn chat-element-right-column-style []
-  "h-[38rem] w-[54.5rem] rounded-lg bg-gray-200 lg:col-span-10")
+  "h-[38rem] w-[54.5rem] bg-blue-950 lg:col-span-10")
 
 (defn generate-chat-buttons
   [username]
