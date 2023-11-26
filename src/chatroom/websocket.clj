@@ -130,9 +130,20 @@
    :body "clients notified!"})
 
 (defn test-handler [request]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (-> (chat/chatroom-view (-> request :params :login) "announcements") (hiccup/html) (str))})
+  (let [username (-> request :params :login)]
+    (if (seq username)
+      ; username is valid (present and not empty string) -> go to chat view
+      {:status 200
+       :headers {"Content-Type" "text/html"}
+       :body (-> (chat/chatroom-view username "announcements")
+                 (hiccup/html)
+                 (str))}
+      ; username is invalid -> redirect back to the login page with the error
+      {:status 200
+       :headers {"Content-Type" "text/html" "HX-Redirect" "/"}
+       :body (-> (login/login-view "please provide a valid username!")
+                 (hiccup/html)
+                 (str))})))
 
 (defn login-request-handler
   [request]

@@ -54,7 +54,8 @@ that to set its value to empty string) the message sent was empty;
 - [x] do a proper chat autoscroll on new messages;
 - [x] fix styling of the side buttons;
 - [x] add a timestamp to every message;
-- [ ] fix styling of the "login" page;
+- [x] fix styling of the "login" page;
 - [x] cache avatar once the user joins the websocket;
 - [x] hook up the chatroom view with the room logic, display rooms on the
       left of the view, let the user switch between them;
+- [x] handle the case when an invalid username is provided; add htmx redirect;

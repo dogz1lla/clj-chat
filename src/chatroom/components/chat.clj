@@ -151,4 +151,5 @@
   (chatbox)
   (map #(= 0 (mod % 2)) (range 10))
   (input-box-input-style)
+  (if (seq "hi") true false)
   )

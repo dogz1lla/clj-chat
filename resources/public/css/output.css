@@ -642,6 +642,10 @@ video {
   height: 10rem;
 }
 
+.h-\[50rem\] {
+  height: 50rem;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -781,6 +785,10 @@ video {
   padding-left: 0.5rem;
 }
 
+.pl-4 {
+  padding-left: 1rem;
+}
+
 .font-semibold {
   font-weight: 600;
 }
@@ -792,6 +800,11 @@ video {
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity));
+}
+
+.text-red-900 {
+  --tw-text-opacity: 1;
+  color: rgb(127 29 29 / var(--tw-text-opacity));
 }
 
 .ring {

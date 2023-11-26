@@ -34,13 +34,16 @@
     [:input (login-form-submit-params)]])
 
 (defn login-view-style []
- "m-auto w-[20rem] h-[10rem] ")
+ "m-auto w-[20rem] h-[50rem] ")
 
 (defn login-view
-  []
+  [& errors]
   [:body
    (htmx-init)
    (htmx-ws-init)
    (page/include-css "/css/output.css")
    [:div {:class (login-view-style)}
-    (login-form)]])
+    (login-form)
+    (when (seq errors)
+     [:div {:class "m-auto pl-2 text-red-900"}
+      (for [error errors] [:li error])])]])
