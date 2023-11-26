@@ -19,7 +19,12 @@
 ;; chat and messages
 (defn chat-msg-style
   [dark?]
-  (format "h-auto w-[53rem] mx-[0.75rem] my-[0.1rem] rounded-lg %s" (if dark? "bg-teal-500/75" "bg-teal-600/75")))
+  (s/join 
+    " "
+    ["h-auto"
+     "w-[53rem] mx-[0.75rem] my-[0.1rem]"
+     "rounded-lg"
+     (if dark? "bg-[#4f475a]" "bg-[#44475a] ")]))
 
 (defn user-avatar-element
   [src]
@@ -36,9 +41,10 @@
   [{:keys [author body timestamp]} dark?]
   [:div {:class (chat-msg-style dark?)}
    (user-avatar-element (get @ava/author->avatar author))
-   [:p {:class "pl-12 italic font-semibold text-yellow-400"} author]
-   [:h8 {:class "pl-2 pl-2"} body]
-   [:span {:style {:float "right" :padding-right "0.5rem" :font-size "0.75rem"}}
+   ;[:p {:class "pl-12 italic font-semibold text-[#ffb86c]"} author]
+   [:p {:class "pl-12 italic font-semibold text-[#ff5555]"} author]
+   [:h8 {:class "pl-2 pl-2 text-[#f8f8f2]"} body]
+   [:span {:style {:float "right" :padding-right "0.5rem" :font-size "0.75rem" :color "#ffb86c"}}
     timestamp]])
 
 (defn chatbox [chat-key & id]
@@ -51,7 +57,7 @@
 ;; ----------------------------------------------------------------------------
 ;; msg input element
 (defn input-box-input-style []
-   "w-full h-full border-teal-500 pl-2")
+   "w-full h-full border border-[#282a36] pl-2")
 
 (defn input-box-input-params []
   {:type "text"
@@ -60,11 +66,12 @@
    :value ""
    :class (input-box-input-style)
    :autofocus true
-   :placeholder "enter your message"})
+   :placeholder "enter your message here and then hit <Enter> to send it!"})
 
 (defn input-box-form-params []
   {:id "msg-input-form"
-   :ws-send true})
+   :ws-send true
+   :class "h-[3rem] "})
 
 (defn input-form-element
   []
@@ -80,7 +87,7 @@
 ;; ----------------------------------------------------------------------------
 ;; chat side panel button
 (defn goto-chat-style []
-  "w-[5rem] h-[5rem] m-1 aspect-square")
+  "w-[5rem] h-[5rem] mx-auto my-1 aspect-square")
 
 (defn goto-chat-button-style []
  "w-full h-full bg-gray-400 rounded-lg border-2 border-teal-500")
@@ -103,14 +110,14 @@
   "h-[38rem] w-[60rem] grid grid-cols-1 gap-1 lg:grid-cols-11 lg:gap-2")
 
 (defn chat-element-left-column-style []
-  "h-[38rem] w-[5.5rem] bg-gray-200")
+  "h-[38rem] w-[5.5rem] bg-[#282a36] border border-1 rounded-lg")
 
 (defn chat-element-right-column-style []
-  "h-[38rem] w-[54.5rem] bg-blue-950 lg:col-span-10")
+  "h-[38rem] w-[54.5rem] bg-[#282a36] lg:col-span-10")
 
 (defn generate-chat-buttons
   [username]
-  [:div {:id "side-buttons"}
+  [:div {:id "side-buttons" :class "mx-auto"}
     (let [all-chats (db/list-chats-for-user username)]
       (for [other-user all-chats] (goto-chat-button username other-user)))])
 
