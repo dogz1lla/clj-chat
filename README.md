@@ -28,6 +28,7 @@ Make your way to the root of the project and run
 ```
 clj -M -m chatroom.main
 ```
+And then please navigate to `localhost:3000/login` in your browser.
 
 ## For further development
 ### Tailwind setup
