@@ -36,12 +36,12 @@
 ;   (doseq [[_ channel] @clients/clients]
 ;     (server/send! channel msg)))
 
-(defn on-chat-msg!
-  " Add a new message to history and update the msg color state."
-  [author msg]
-  (when (not (get @ava/author->avatar author))
-    (swap! ava/author->avatar assoc author (ava/random-avatar)))
-  (swap! db/msg-log conj {:author author :body msg}))
+; (defn on-chat-msg!
+;   " Add a new message to history and update the msg color state."
+;   [author msg]
+;   (when (not (get @ava/author->avatar author))
+;     (swap! ava/author->avatar assoc author (ava/random-avatar)))
+;   (swap! db/msg-log conj {:author author :body msg}))
 
 ;; see https://github.com/http-kit/http-kit/blob/master/src/org/httpkit/server.clj
 (defn ws-connect-handler

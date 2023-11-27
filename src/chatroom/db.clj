@@ -14,13 +14,13 @@
   (:require [chatroom.utils :as utils]))
 
 ;; TODO: remove after fixing rooms (this will be in announcements)
-(def msg-log 
-  (atom [{:author "announcements"
-          :body "Greetings, welcome to dogz1lla's chat app!"}
-         {:author "chat-bot"
-          :body "hi"}
-         {:author "chat-bot"
-          :body "bye"}]))
+; (def msg-log 
+;   (atom [{:author "announcements"
+;           :body "Greetings, welcome to dogz1lla's chat app!"}
+;          {:author "chat-bot"
+;           :body "hi"}
+;          {:author "chat-bot"
+;           :body "bye"}]))
 
 ;; # Users
 ;; ----------------------------------------------------------------------------
@@ -45,12 +45,15 @@
    [{:author "announcements"
      :body "Greetings, welcome to dogz1lla's chat app!"
      :timestamp "Sun Nov 26 00:00:00 CET 2023"}
-    {:author "chat-bot"
-     :body "hi"
+    {:author "announcements"
+     :body "This is an 'announcements' chat. It is a default chat for any new user."
      :timestamp "Sun Nov 26 00:00:01 CET 2023"}
     {:author "chat-bot"
+     :body "hi"
+     :timestamp "Sun Nov 26 00:00:02 CET 2023"}
+    {:author "chat-bot"
      :body "bye"
-     :timestamp "Sun Nov 26 00:00:02 CET 2023"}])
+     :timestamp "Sun Nov 26 00:00:03 CET 2023"}])
 
 (def chats (atom {#{"announcements"} announcements-log}))
 
