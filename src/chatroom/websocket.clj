@@ -131,8 +131,8 @@
 
 (defn test-handler [request]
   (let [username (-> request :params :login)]
-    (if (seq username)
-      ; username is valid (present and not empty string) -> go to chat view
+    (if (and (seq username) (< 1 (count username)))
+      ; username is valid (present and long enough (>=2)) -> go to chat view
       {:status 200
        :headers {"Content-Type" "text/html"}
        :body (-> (chat/chatroom-view username "announcements")
