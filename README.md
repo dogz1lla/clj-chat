@@ -1,7 +1,7 @@
 # clj-chat
 
 ## Description
-A simplistic chat application to use in a browser.
+A simplistic chat application to use in browser.
 
 ## Motivation
 - I like clojure;
@@ -10,7 +10,7 @@ A simplistic chat application to use in a browser.
 - I wanted to build something using websockets;
 
 ## What's implemented?
-- common chatroom for every user that is registered in the app (`announcements`);
+- common chatroom for every user that is registered in the app ("`announcements`");
 - separate chatrooms for each pair of users;
 - automatic update of the chatroom list for every existing user upon a brand
 new user connecting;
@@ -23,7 +23,15 @@ new user connecting;
 - any db (atoms are used currently to hold all state);
 - user defined avatars;
 
-## Tailwind setup
+## How to run
+Make your way to the root of the project and run
+```
+clj -M -m chatroom.main
+```
+
+## For further development
+### Tailwind setup
+Check out [this](https://youtu.be/V-dBmuRsW6w?si=1vh9GLk_zo9BH2Wv) video for useful info.
 - first of all, check out the stand-alone tailwind executable setup page:
 [here](https://tailwindcss.com/blog/standalone-cli).
 - don't forget to add `clj` file extension to `tailwind.config.js`; for more
@@ -82,3 +90,5 @@ that to set its value to empty string) the message sent was empty;
 - [x] handle the case when an invalid username is provided; add htmx redirect;
 - [x] add overfill auto to the side button column and test;
 - [ ] figure out how to load htmx only once;
+- [ ] update README with directions regarding running using clojure cli
+building executable;

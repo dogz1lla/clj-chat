@@ -12,7 +12,6 @@
             [ring.middleware.keyword-params :as rmkp]
             [ring.middleware.resource :as rmr]
             [cheshire.core :as cheshire]
-            [clojure.data.json :as json]
             [clojure.string :as s]
             [clojure.set :as cs]))
 
@@ -146,8 +145,6 @@
 
 (defn login-request-handler
   [request]
-  ;(println (:query-string request))
-  (println request)
   {:status 200
    :headers {"Content-Type" "text/html"}
    :body (-> (login/login-view) (hiccup/html) (str))})
