@@ -17,7 +17,10 @@
             [clojure.set :as cs]))
 
 
-(defn notify-clients [msg & selected-ids]
+(defn notify-clients
+  "Send a string message to all or selected (if selected-ids set is provided)
+  websocket client connections."
+  [msg & selected-ids]
   (let [all-channels @clients/clients
         send-to (if 
                   (seq selected-ids) 
@@ -35,6 +38,14 @@
 ;; see https://github.com/http-kit/http-kit/blob/master/src/org/httpkit/server.clj
 (defn ws-connect-handler
   "Handle a websocket connection request.
+  :on-connect
+    - check if the user that is connecting is a new one;
+    - associate the websocket connection id with the username;
+    - initialize chats between this user and all others if necessary;
+    - add the username to the database if necessary;
+    - generate a random avatar img if necessary;
+    - if the user is new then update the chat view for all other users with the
+      extra button corresponding to the new user's chat;
   :on-receive
     - go and fetch which chat the message has been sent to by looking up which
       chat is active for the given user;
@@ -44,7 +55,11 @@
       to the set;
     - construct the html str response;
     - add the new chat message to the db;
-    - send the html over ws to relevant clients."
+    - send the html over ws to relevant clients;
+  :on-close
+    - dissoc websocket uid from user's set of connection ids;
+    - dissoc websocket connection client;
+    "
   [ring-req]
   (if-not (:websocket? ring-req)
     {:status 200 :body "Welcome to the chatroom! JS client connecting..."}
@@ -52,7 +67,7 @@
       (let [username (-> ring-req :params :username)
             uid (utils/uuid)] ; websocket connection uid
         {:on-receive (fn [ch message]
-                       (println message)
+                       #_(println message)
                        (let [other-user (db/get-users-active-chat username)
                              parsed-msg (get (cheshire/parse-string message) "input-ws")
                              username-conn-ids (clients/get-users-conns username)
@@ -85,9 +100,8 @@
                        )
          :on-close   (fn [ch status] 
                        (swap! clients/clients dissoc uid)
-                       #_(swap! ava/author->avatar dissoc username)
                        (clients/rm-ws-conn! username uid)
-                       (println (str "client " uid " disconnected with status " status)))
+                       (println (str "client " uid " (user " username ") disconnected with status " status)))
          :on-open    (fn [ch]
                        (let [new-user? (not ((db/get-users) username))]
                          (swap! clients/clients assoc uid ch)
@@ -105,20 +119,16 @@
                                (-> (chat/generate-chat-buttons username)
                                    (hiccup/html)
                                    (str))))))
-                       #_(println @clients/clients))}))))
+                       (println (str "client " uid " (user " username ") connected")))}))))
 
 (defn ping-handler [request]
   {:status 200
    :headers {"Content-Type" "text/plain"}
    :body "pong"})
 
-(defn handler-receive [request]
-  (notify-clients (json/write-str (utils/parse-params-str request)))
-  {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body "clients notified!"})
-
-(defn test-handler [request]
+(defn chat-handler
+  "Main chat view."
+  [request]
   (let [username (-> request :params :login)]
     (if (and (seq username) (< 1 (count username)))
       ; username is valid (present and long enough (>=2)) -> go to chat view
@@ -161,23 +171,22 @@
                (hiccup/html)
                (str))}))
 
-(defroutes test-routes
+(defroutes app-routes
   ;; html
   (GET "/" request (root-handler request))
   (GET "/login" request (login-request-handler request))
-  (POST "/chat" request (test-handler request))
+  (POST "/chat" request (chat-handler request))
   (GET "/switch_chat" request (switch-chat-handler request))
   ;(GET "/button-test" request (test-button-press-handler request))
   ;; rest api
   (GET "/ping" request (ping-handler request))
-  (GET "/receive" request (handler-receive request))
   (GET "/ws/connect" request (ws-connect-handler request)))
 
 ;; server 
 (defonce server (atom nil))
 
 (def app
-  (-> test-routes
+  (-> app-routes
       (rmr/wrap-resource "public")
       rmkp/wrap-keyword-params
       rmp/wrap-params))

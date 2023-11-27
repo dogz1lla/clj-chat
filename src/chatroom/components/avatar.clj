@@ -1,4 +1,5 @@
 (ns chatroom.components.avatar
+  "Logic to generate random avatars."
   (:require [clojure.java.io :as io]
             [chatroom.utils :as utils]))
 

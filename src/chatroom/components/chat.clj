@@ -1,5 +1,6 @@
 ;; TODO: take out "test-element-ws" id of the chatbox into a var
 (ns chatroom.components.chat
+  "Chat views."
   (:require [hiccup.page :as page]
             [clojure.string :as s]
             [chatroom.components.avatar :as ava]
@@ -142,7 +143,8 @@
   "h-[38rem] w-[60rem] m-auto")
 
 (defn chatroom-view
-  "TODO figure out how to take out the init part outside"
+  "Main chat app view. Requires the username of the user and also the username
+  of the second user (recipient of the messages)."
   [username other-user]
   [:body {:class "h-[40rem] w-[61rem] m-auto"}
      (htmx-init)

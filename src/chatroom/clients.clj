@@ -1,4 +1,5 @@
 (ns chatroom.clients
+  "Logic to handle ws connections for users."
   (:require [clojure.set :as cs]))
 
 
@@ -6,6 +7,8 @@
 (def user->ws-conn-id (atom {}))
 
 (defn add-ws-conn!
+  "Add a ws connection id to the set of ids associated with username or init it
+  to the set of one item."
   [username conn-uid]
   (let [username (keyword username)
         conns (@user->ws-conn-id username)]
@@ -14,6 +17,7 @@
       (swap! user->ws-conn-id assoc username #{conn-uid}))))
 
 (defn rm-ws-conn!
+  "Dissoc the ws connection id from the set of ids of the username."
   [username conn-uid]
   (let [username (keyword username)
         conns (@user->ws-conn-id username)]

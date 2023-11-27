@@ -60,3 +60,4 @@ that to set its value to empty string) the message sent was empty;
       left of the view, let the user switch between them;
 - [x] handle the case when an invalid username is provided; add htmx redirect;
 - [x] add overfill auto to the side button column and test;
+- [ ] figure out how to load htmx only once;

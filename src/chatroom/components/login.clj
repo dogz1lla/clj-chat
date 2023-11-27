@@ -1,7 +1,8 @@
 (ns chatroom.components.login
+  "Login view."
   (:require [hiccup.page :as page]))
 
-;; TODO: fiqure out how to load htmx only once
+
 (defn htmx-init []
   [:script {:src "https://unpkg.com/htmx.org@1.9.6"}])
 
@@ -37,6 +38,7 @@
  "m-auto w-[20rem] h-[50rem] ")
 
 (defn login-view
+  "If the login errors are provided render them as an unordered list."
   [& errors]
   [:body
    (htmx-init)
