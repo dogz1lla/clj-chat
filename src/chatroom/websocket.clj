@@ -88,7 +88,7 @@
                              recipient-conn-ids (cs/union recipient-conn-ids announcement-conn-ids)]
                          (db/add-chat-msg! username other-user parsed-msg)
                          (notify-clients
-                           (-> (chat/chatbox chat-key "test-element-ws")
+                           (-> (chat/chatbox chat-key "chatroom")
                                (hiccup/html)
                                (str))
                            recipient-conn-ids))
@@ -167,7 +167,7 @@
     (db/set-users-active-chat! username other-user)
     {:status 200
      :headers {"Content-Type" "text/html"}
-     :body (-> (chat/chatbox (db/get-chat-key username other-user) "test-element-ws")
+     :body (-> (chat/chatbox (db/get-chat-key username other-user) "chatroom")
                (hiccup/html)
                (str))}))
 

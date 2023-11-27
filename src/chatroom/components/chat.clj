@@ -1,4 +1,4 @@
-;; TODO: take out "test-element-ws" id of the chatbox into a var
+;; TODO: take out "chatroom" id of the chatbox into a var
 (ns chatroom.components.chat
   "Chat views."
   (:require [hiccup.page :as page]
@@ -95,7 +95,7 @@
 (defn goto-chat-button-params [username other-user]
   {:type "button"
    :hx-get (format "/switch_chat?username=%s&otherUser=%s" username (or other-user "announcements"))
-   :hx-target "#test-element-ws"
+   :hx-target "#chatroom"
    :hx-swap "outerHTML"
    :class (goto-chat-button-style)})
 
@@ -129,7 +129,7 @@
    [:div {:class (chat-element-right-column-style)}
     [:div {:class "h-[38rem] w-full grid grid-rows-11 gap-2"}
      [:div {:class "h-[34.5rem] w-full row-start-1 row-span-10"}
-        (chatbox (db/get-chat-key username other-user) "test-element-ws")]
+        (chatbox (db/get-chat-key username other-user) "chatroom")]
      [:div {:class "h-[3rem] w-full row-start-11 row-span-1"}
       (input-box-ws username)]]]])
 
