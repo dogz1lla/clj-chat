@@ -3,6 +3,10 @@
 ## Description
 A simplistic chat application to use in browser.
 
+**DISCLAIMER**: THIS IS NOT A SERIOUS MESSENGER APPLICATION MEANING THERE IS NO
+SECURITY FEATURES IMPLEMENTED WHATSOEVER! DO NOT USE IT TO SHARE SENSITIVE
+INFORMATION OVER INTERNET! USE AT YOUR OWN RISK!
+
 ## Motivation
 - I like clojure;
 - I wanted to build something (potentially) useful;
@@ -42,7 +46,7 @@ section run the following in another terminal instance:
 `ngrok` will then output url that is used to forward the local address and that
 can be shared with anyone anywhere to be able to connect to the chat app.
 
-*DISCLAIMER*: NOT SECURE! USE ONLY FOR TESTING AND PLAYING AROUND! DO NOT SHARE
+**DISCLAIMER**: NOT SECURE! USE ONLY FOR TESTING AND PLAYING AROUND! DO NOT SHARE
 SENSITIVE INFORMATION VIA THIS APP!
 
 ## For further development
