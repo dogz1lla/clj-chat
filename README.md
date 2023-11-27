@@ -1,10 +1,27 @@
 # clj-chat
 
-## Short description
-This is a messaging application.
+## Description
+A simplistic chat application to use in a browser.
 
 ## Motivation
-I wanted to try and build something using htmx.
+- I like clojure;
+- I wanted to build something (potentially) useful;
+- I wanted to build something using htmx;
+- I wanted to build something using websockets;
+
+## What's implemented?
+- common chatroom for every user that is registered in the app (`announcements`);
+- separate chatrooms for each pair of users;
+- automatic update of the chatroom list for every existing user upon a brand
+new user connecting;
+- randomly generated avatars using [avataaars](https://getavataaars.com/);
+
+## What's NOT implemented?
+- any auth -- anyone can impersonate anyone else;
+- new message notifications;
+- chatrooms of more than two users (only exception -- `announcements` chatroom);
+- any db (atoms are used currently to hold all state);
+- user defined avatars;
 
 ## Tailwind setup
 - first of all, check out the stand-alone tailwind executable setup page:
@@ -18,12 +35,16 @@ details see this [guide](https://youtu.be/V-dBmuRsW6w?si=tNI89NMQvHnJAfg0&t=1954
 ```
 
 ## Design flaws
+- each chatroom view updates the entire message history upon any new message;
+should be updating the relevant div by only appending new messages;
 - There is a potential problem with how chat messages element gets updated on
 receiving a new message.
+
 How it works: one of the two parties in the chat sends a message and that
 triggers the html element update for both the sender and recipient;
 however for the latter only happens if the recipient looks at this same chat
 in their browser at this moment;
+
 Now imagine the situation where the recipient switches the view to another chat
 after the update of the element responce was sent to the client from the server
 but before the element was actually updated in the browser -> this would lead
