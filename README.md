@@ -59,4 +59,4 @@ that to set its value to empty string) the message sent was empty;
 - [x] hook up the chatroom view with the room logic, display rooms on the
       left of the view, let the user switch between them;
 - [x] handle the case when an invalid username is provided; add htmx redirect;
-- [ ] add overfill auto to the side button column and test;
+- [x] add overfill auto to the side button column and test;

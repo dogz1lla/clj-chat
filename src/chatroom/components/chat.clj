@@ -109,7 +109,7 @@
   "h-[38rem] w-[60rem] grid grid-cols-1 gap-1 lg:grid-cols-11 lg:gap-2")
 
 (defn chat-element-left-column-style []
-  "h-[38rem] w-[5.5rem] bg-[#282a36] border border-1 rounded-lg")
+  "h-[38rem] w-[5.5rem] bg-[#282a36] border border-1 rounded-lg overflow-auto")
 
 (defn chat-element-right-column-style []
   "h-[38rem] w-[54.5rem] bg-[#282a36] lg:col-span-10")
