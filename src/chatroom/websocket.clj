@@ -32,17 +32,6 @@
   (let [user-conns (clients/get-users-conns username)]
     (notify-clients msg user-conns)))
 
-; (defn notify-clients [msg]
-;   (doseq [[_ channel] @clients/clients]
-;     (server/send! channel msg)))
-
-; (defn on-chat-msg!
-;   " Add a new message to history and update the msg color state."
-;   [author msg]
-;   (when (not (get @ava/author->avatar author))
-;     (swap! ava/author->avatar assoc author (ava/random-avatar)))
-;   (swap! db/msg-log conj {:author author :body msg}))
-
 ;; see https://github.com/http-kit/http-kit/blob/master/src/org/httpkit/server.clj
 (defn ws-connect-handler
   "Handle a websocket connection request.
@@ -150,16 +139,16 @@
   ;(println (:query-string request))
   (println request)
   {:status 200
-   :headers {"Content-Type" "text/html", "HX-Redirect" "/test"}
-   :body {:login (-> request :params :login)}})
+   :headers {"Content-Type" "text/html"}
+   :body (-> (login/login-view) (hiccup/html) (str))})
 
 (defn root-handler
   [request]
   ;(println (:query-string request))
   #_(println request)
   {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (-> (login/login-view) (hiccup/html) (str))})
+   :headers {"Content-Typej" "text/html"}
+   :body "<h1>Please visit '/login' page</h1>"})
 
 (defn switch-chat-handler
   [request]
@@ -168,13 +157,15 @@
     (db/set-users-active-chat! username other-user)
     {:status 200
      :headers {"Content-Type" "text/html"}
-     :body (-> (chat/chatbox (db/get-chat-key username other-user) "test-element-ws") (hiccup/html) (str))}))
+     :body (-> (chat/chatbox (db/get-chat-key username other-user) "test-element-ws")
+               (hiccup/html)
+               (str))}))
 
 (defroutes test-routes
   ;; html
   (GET "/" request (root-handler request))
-  (GET "/login-request" request (login-request-handler request))
-  (POST "/test" request (test-handler request))
+  (GET "/login" request (login-request-handler request))
+  (POST "/chat" request (test-handler request))
   (GET "/switch_chat" request (switch-chat-handler request))
   ;(GET "/button-test" request (test-button-press-handler request))
   ;; rest api

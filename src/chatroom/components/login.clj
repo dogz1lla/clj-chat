@@ -9,7 +9,7 @@
   [:script {:src "https://unpkg.com/htmx.org/dist/ext/ws.js"}])
 
 (defn login-form-params []
-  {:id "login-form" :action "/test" :method "post"})
+  {:id "login-form" :action "/chat" :method "post"})
 
 (defn login-form-input-field-style []
   "h-10 w-full border-2 border-[#bd93f9] pl-2 mt-4")
