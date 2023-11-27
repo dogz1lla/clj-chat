@@ -30,6 +30,21 @@ clj -M -m chatroom.main
 ```
 And then please navigate to `localhost:3000/login` in your browser.
 
+## How to test with actual users
+One way to run the app and *actually* use it as messenger is to use [ngrok](https://ngrok.com/download).
+After installing `ngrok` and running the server as described in the previous
+section run the following in another terminal instance:
+```
+/path/to/ngrok/executable http 3000
+```
+(assuming you are running the app on the default port 3000).
+
+`ngrok` will then output url that is used to forward the local address and that
+can be shared with anyone anywhere to be able to connect to the chat app.
+
+*DISCLAIMER*: NOT SECURE! USE ONLY FOR TESTING AND PLAYING AROUND! DO NOT SHARE
+SENSITIVE INFORMATION VIA THIS APP!
+
 ## For further development
 ### Tailwind setup
 Check out [this](https://youtu.be/V-dBmuRsW6w?si=1vh9GLk_zo9BH2Wv) video for useful info.
