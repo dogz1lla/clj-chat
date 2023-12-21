@@ -1,5 +1,7 @@
 # clj-chat
 
+![chat screenshot](chat.png)
+
 ## Description
 A simplistic chat application to use in browser.
 
